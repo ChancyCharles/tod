@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 20px;
+        }
+
+        .todo-list, .add-task {
+            width: 45%;
+        }
+
+        table {
+            width: 200%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid black;
+        }
+
+
+        .add-btn {
+            background-color: green;
+            color: white;
+            margin-top: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label, input {
+            margin-bottom: 10px;
+        }
+
+        input {
+            padding: 8px;
+            width: calc(100% - 16px);
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="todo-list">
+            <h2>Todo List</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Status</th>
+                        <th>Deadline</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for Todo in todos %}
+                    <tr>
+                        <td>{{ Todo.Task }}</td>
+                        <td>{{ Todo.Status }}</td>
+                        <td>{{ Todo.Deadline }}</td>
+                                        <td>
+                                <a href="{% url 'edit' Todo.pk %}" class="btn btn-primary btn-sm">Edit</a><br>
+                                <form action="{% url 'delete' Todo.pk %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                  <BR>  <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="add">
+            <h2>Add Task</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="add-btn btn btn-success">Add Task</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
